@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+message="${1:-$(cat -)}"
+token=$(jq -r .token "${HOME}/.pushover.json")
+user=$(jq -r .user "${HOME}/.pushover.json")
+
+curl --silent -XPOST "https://api.pushover.net/1/messages.json" \
+  -H "Content-Type: application/json" \
+  -d "$(jo token="${token}" user="${user}" message="${message}")" \
+  > /dev/null

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+prefix="${HOME}/.cache/zsh-snap"
+entry="$(ls "${prefix}" | fzf)"
+
+ls "${prefix}/${entry}" |\
+  fzf --multi |\
+  xargs -I % rm "${prefix}/${entry}/%"

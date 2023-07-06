@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+files=$(rg "$@" | cut -d: -f1 | sort -u)
+
+$EDITOR $files

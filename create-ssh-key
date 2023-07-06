@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -xeuo pipefail
+
+alg="${1:-ed25519}"
+name="id_${alg}"
+
+if [[ ! -f "${HOME}/.ssh/${name}" ]]; then
+  ssh-keygen -qP "" -t "${alg}" -f "${HOME}/.ssh/${name}" -C "${name}"
+fi

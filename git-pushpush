@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+branchName="${1:-$(git-branch-name)}"
+
+git push origin "${branchName}" --no-verify --set-upstream

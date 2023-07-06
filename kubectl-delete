@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+type="${1}"
+thing=$(kubectl get "${type}" | fzf --header-lines=1 | choose 0)
+kubectl delete "${type}" "${thing}"

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+version=$(n ls | fzf)
+n exec "${version}" "${@:1}"

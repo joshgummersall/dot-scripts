@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+message="${1:-$(gum input --prompt "message? ")}"
+
+app="${TERMINAL_APPLICATION:-${TERM_PROGRAM}}"
+title="${2:-"${app}"}"
+
+activate=`bundle-id "${app}"`
+
+terminal-notifier \
+  -ignoreDnD \
+  -activate "${activate}" \
+  -message "${message}" \
+  -title "${title}"

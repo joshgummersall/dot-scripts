@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+file="${HOME}/.brew-packages"
+
+cmd="${1:-"up"}"
+
+case $cmd in
+  "save")
+    brew list | sort -u > "${file}"
+    ;;
+  "up")
+    goal=$(sort -u "${file}")
+    curr=$(brew list | sort -u)
+
+    comm -23 <(printf '%s\n' "$goal") <(printf '%s\n' "$curr") |\
+      xargs brew install
+
+    comm -13 <(printf '%s\n' "$goal") <(printf '%s\n' "$curr") |\
+      xargs brew uninstall -f
+
+    brew autoremove
+    ;;
+  *)
+    echo "${cmd} not valid command"
+    ;;
+esac
+

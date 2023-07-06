@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+url="${1}"
+
+node -e "console.log(JSON.stringify(require('url').parse(\"${url}\", true), null, 2))"

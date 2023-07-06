@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+image="${1:-$(docker images | fzf --header-lines=1 | choose 2)}"
+
+docker run --rm -ti "${@:2}" "${image}"

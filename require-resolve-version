@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+jq .version $(require-resolve "${1}/package.json")
