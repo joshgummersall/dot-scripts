@@ -2,25 +2,37 @@
 
 set -euo pipefail
 
-file="${HOME}/.brew-packages"
+prefix=".brew-sync"
+
+taps_file="${HOME}/${prefix}/taps"
+packages_file="${HOME}/${prefix}/packages"
 
 cmd="${1:-"up"}"
 
 case $cmd in
+  "init")
+    mkdir "${HOME}/${prefix}"
+    ;;
   "save")
-    brew list | sort -u > "${file}"
+    brew tap | sort -u > "${taps_file}"
+    brew list | sort -u > "${packages_file}"
     ;;
   "up")
     brew update
     brew upgrade
 
-    goal=$(sort -u "${file}")
-    curr=$(brew list | sort -u)
+    goal_taps=$(sort -u "${taps_file}")
+    curr_taps=$(brew tap | sort -u)
+    comm -23 <(printf '%s\n' "$goal_taps") <(printf '%s\n' "$curr_taps") |\
+      xargs brew tap
+    comm -13 <(printf '%s\n' "$goal_taps") <(printf '%s\n' "$curr_taps") |\
+      xargs brew untap
 
-    comm -23 <(printf '%s\n' "$goal") <(printf '%s\n' "$curr") |\
+    goal_packages=$(sort -u "${packages_file}")
+    curr_packages=$(brew list | sort -u)
+    comm -23 <(printf '%s\n' "$goal_packages") <(printf '%s\n' "$curr_packages") |\
       xargs brew install
-
-    comm -13 <(printf '%s\n' "$goal") <(printf '%s\n' "$curr") |\
+    comm -13 <(printf '%s\n' "$goal_packages") <(printf '%s\n' "$curr_packages") |\
       xargs brew uninstall -f
 
     brew autoremove
