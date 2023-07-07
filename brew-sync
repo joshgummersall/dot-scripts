@@ -11,6 +11,9 @@ case $cmd in
     brew list | sort -u > "${file}"
     ;;
   "up")
+    brew update
+    brew upgrade
+
     goal=$(sort -u "${file}")
     curr=$(brew list | sort -u)
 
