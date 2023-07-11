@@ -2,5 +2,10 @@
 
 set -euo pipefail
 
-sudo lsof -nP -iTCP -sTCP:LISTEN |\
+if [ "$EUID" -ne 0 ]; then
+    echo "Please run this script with sudo."
+    exit 1
+fi
+
+lsof -nP -iTCP -sTCP:LISTEN |\
   fzf --header-lines=1 --multi -q "${1:-""}"
