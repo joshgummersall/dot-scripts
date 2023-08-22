@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+docker ps | fzf --header-lines=1 | choose 0
