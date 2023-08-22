@@ -2,6 +2,4 @@
 
 set -euo pipefail
 
-image="${1:-$(docker images | fzf --header-lines=1 | choose 2)}"
-
-docker-run "${image}" --entrypoint=/bin/bash "${@:2}"
+docker-run --entrypoint=/bin/bash "${@:2}"

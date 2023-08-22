@@ -2,6 +2,6 @@
 
 set -euo pipefail
 
-image="${1:-$(docker images | fzf --header-lines=1 | choose 2)}"
+image="$(docker images | fzf --header-lines=1 | choose 2)"
 
-docker run --rm -ti "${@:2}" "${image}"
+docker run --rm -ti "${@:1}" "${image}"
