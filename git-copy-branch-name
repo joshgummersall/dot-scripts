@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+git-branch-name | tr -d '\n' | pbcopy
