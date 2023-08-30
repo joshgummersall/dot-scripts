@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+kubectl run "${2:-"joshgu-tmp"}" --restart=Never --rm -i --tty --image "${1:-"busybox"}"
