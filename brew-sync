@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -xeuo pipefail
+set -euo pipefail
 
 prefix=".brew-sync"
 
@@ -14,28 +14,40 @@ case $cmd in
     mkdir "${HOME}/${prefix}"
     ;;
   "save")
-    brew tap | sort -u > "${taps_file}"
-    brew list | sort -u > "${packages_file}"
+    gum confirm "Update brew taps file?" && brew tap | sort -u > "${taps_file}"
+    gum confirm "Update brew packages file?" && brew list | sort -u > "${packages_file}"
     ;;
   "up")
-    brew update
-    brew upgrade
+    gum confirm "Update brew?" && brew update
+    gum confirm "Upgrade brew packages?" && brew upgrade
 
     goal_taps=$(sort -u "${taps_file}")
     curr_taps=$(brew tap | sort -u)
-    comm -23 <(printf '%s\n' "$goal_taps") <(printf '%s\n' "$curr_taps") |\
-      xargs brew tap
-    comm -13 <(printf '%s\n' "$goal_taps") <(printf '%s\n' "$curr_taps") |\
-      xargs brew untap
+
+    to_tap=$(comm -23 <(printf '%s\n' "$goal_taps") <(printf '%s\n' "$curr_taps"))
+    if [ -n "${to_tap}" ]; then
+      gum confirm "Tap brew packages (${to_tap})?" && echo "${to_tap}" | xargs brew tap
+    fi
+
+    to_untap=$(comm -13 <(printf '%s\n' "$goal_taps") <(printf '%s\n' "$curr_taps"))
+    if [ -n "${to_untap}" ]; then
+      gum confirm "Tap brew packages (${to_untap})?" && echo "${to_untap}" | xargs brew untap -f
+    fi
 
     goal_packages=$(sort -u "${packages_file}")
     curr_packages=$(brew list | sort -u)
-    comm -23 <(printf '%s\n' "$goal_packages") <(printf '%s\n' "$curr_packages") |\
-      xargs brew install
-    comm -13 <(printf '%s\n' "$goal_packages") <(printf '%s\n' "$curr_packages") |\
-      xargs brew uninstall -f
 
-    brew autoremove
+    to_install=$(comm -23 <(printf '%s\n' "$goal_packages") <(printf '%s\n' "$curr_packages"))
+    if [ -n "${to_install}" ]; then
+      gum confirm "Install brew packages (${to_install})?" && echo "${to_install}" | xargs brew install
+    fi
+
+    to_uninstall=$(comm -13 <(printf '%s\n' "$goal_packages") <(printf '%s\n' "$curr_packages"))
+    if [ -n "${to_uninstall}" ]; then
+      gum confirm "Install brew packages (${to_uninstall})?" && echo "${to_uninstall}" | xargs brew uninstall -f
+    fi
+
+    gum confirm "Brew autoremove?" && brew autoremove
     ;;
   *)
     echo "${cmd} not valid command"
