@@ -3,51 +3,60 @@
 set -euo pipefail
 
 prefix=".brew-sync"
+path="${HOME}/${prefix}"
 
-taps_file="${HOME}/${prefix}/taps"
-packages_file="${HOME}/${prefix}/packages"
+taps_file="${path}/taps"
+packages_file="${path}/packages"
 
 cmd="${1:-"up"}"
+
+curr_taps=$(brew tap | sort -u)
+curr_packages=$(brew list | sort -u)
 
 case $cmd in
   "init")
     mkdir "${HOME}/${prefix}"
     ;;
   "save")
+    cp "${taps_file}" "${taps_file}.old"
     gum confirm "Update brew taps file?" && brew tap | sort -u > "${taps_file}"
+    diff -q "${taps_file}" "${taps_file}.old" 2>&1 > /dev/null || \
+      gum confirm "View taps diff?" && delta "${taps_file}.old" "${taps_file}"
+
+    cp "${packages_file}" "${packages_file}.old"
     gum confirm "Update brew packages file?" && brew list | sort -u > "${packages_file}"
+    diff -q "${packages_file}" "${packages_file}.old" 2>&1 > /dev/null || \
+      gum confirm "View packages diff?" && delta "${packages_file}.old" "${packages_file}"
     ;;
   "up")
-    gum confirm "Update brew?" && brew update
-    gum confirm "Upgrade brew packages?" && brew upgrade
+    gum confirm "Update brew?" && brew update --quiet
+    gum confirm "Upgrade brew packages?" && brew upgrade --quiet
 
     goal_taps=$(sort -u "${taps_file}")
-    curr_taps=$(brew tap | sort -u)
 
     to_tap=$(comm -23 <(printf '%s\n' "$goal_taps") <(printf '%s\n' "$curr_taps"))
     if [ -n "${to_tap}" ]; then
-      gum confirm "Tap brew packages (${to_tap})?" && echo "${to_tap}" | xargs brew tap
+      gum confirm "Tap brew packages (${to_tap})?" && echo "${to_tap}" | xargs brew tap --quiet
     fi
 
     to_untap=$(comm -13 <(printf '%s\n' "$goal_taps") <(printf '%s\n' "$curr_taps"))
     if [ -n "${to_untap}" ]; then
-      gum confirm "Tap brew packages (${to_untap})?" && echo "${to_untap}" | xargs brew untap -f
+      gum confirm "Tap brew packages (${to_untap})?" && echo "${to_untap}" | xargs brew untap --force --quiet
     fi
 
     goal_packages=$(sort -u "${packages_file}")
-    curr_packages=$(brew list | sort -u)
 
     to_install=$(comm -23 <(printf '%s\n' "$goal_packages") <(printf '%s\n' "$curr_packages"))
     if [ -n "${to_install}" ]; then
-      gum confirm "Install brew packages (${to_install})?" && echo "${to_install}" | xargs brew install
+      gum confirm "Install brew packages (${to_install})?" && echo "${to_install}" | xargs brew install --quiet
     fi
 
     to_uninstall=$(comm -13 <(printf '%s\n' "$goal_packages") <(printf '%s\n' "$curr_packages"))
     if [ -n "${to_uninstall}" ]; then
-      gum confirm "Install brew packages (${to_uninstall})?" && echo "${to_uninstall}" | xargs brew uninstall -f
+      gum confirm "Install brew packages (${to_uninstall})?" && echo "${to_uninstall}" | xargs brew uninstall --force --quiet
     fi
 
-    gum confirm "Brew autoremove?" && brew autoremove
+    gum confirm "Brew autoremove?" && brew autoremove --quiet
     ;;
   *)
     echo "${cmd} not valid command"
