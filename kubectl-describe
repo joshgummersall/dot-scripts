@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+thing="${1:-""}"
+query="${2:-""}"
+
+kubectl get "${thing}" |\
+  fzf --header-lines=1 --query="${query}" \
+    --preview="kubectl describe ${thing} {1} | bat --language=yaml --decorations=never" \
+    --bind 'ctrl-d:preview-half-page-down,ctrl-u:preview-half-page-up,ctrl-o:execute-silent(echo -n {1} | pbcopy)' |\
+  choose 0
