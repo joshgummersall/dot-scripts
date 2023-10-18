@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+brew search "${1}" |\
+  fzf --preview 'brew info {}' --bind 'ctrl-i:execute(brew install {})+accept-empty'
