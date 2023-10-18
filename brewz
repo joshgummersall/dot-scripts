@@ -2,5 +2,9 @@
 
 set -euo pipefail
 
-brew search "${1}" |\
-  fzf --preview 'brew info {}' --bind 'ctrl-i:execute(brew install {})+accept-empty'
+brew list |\
+  fzf --query "${1:-""}" \
+    --bind 'ctrl-s:reload-sync(brew search {q})' \
+    --bind 'ctrl-u:execute(brew uninstall {})+reload-sync(brew list)' \
+    --bind 'ctrl-i:execute(brew install {})+reload-sync(brew list)' \
+    --bind '?:preview(brew info {})' \
