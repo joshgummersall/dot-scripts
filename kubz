@@ -9,9 +9,9 @@ preview="kubectl describe ${type} {1} --show-events | bat --language=yaml --deco
 
 kubectl get "${type}" |\
   fzf --header-lines=1 --query="${query}" \
-    --preview="${preview}" \
+    --border='bottom' --border-label='c-o: copy, c-l: logs' --border-label-pos=2 \
+    --preview="${preview}" --preview-label='kubectl describe' \
     --bind 'ctrl-d:preview-half-page-down' \
     --bind 'ctrl-o:execute-silent(echo -n {1} | pbcopy)' \
-    --bind "ctrl-l:preview(kubectl logs ${type}/{1} --follow)" \
-    --bind 'ctrl-u:preview-half-page-up' \
-    --bind "esc:preview(${preview})"
+    --bind "ctrl-l:execute(kubectl logs ${type}/{1} --follow)" \
+    --bind 'ctrl-u:preview-half-page-up'
