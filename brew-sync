@@ -19,18 +19,16 @@ case $cmd in
     ;;
   "save")
     cp "${taps_file}" "${taps_file}.old"
-    gum confirm "Update brew taps file?" && brew tap | sort -u > "${taps_file}"
-    diff -q "${taps_file}" "${taps_file}.old" 2>&1 > /dev/null || \
-      gum confirm "View taps diff?" && delta "${taps_file}.old" "${taps_file}"
+    brew tap | sort -u > "${taps_file}"
+    delta "${taps_file}.old" "${taps_file}"
 
     cp "${packages_file}" "${packages_file}.old"
-    gum confirm "Update brew packages file?" && brew list | sort -u > "${packages_file}"
-    diff -q "${packages_file}" "${packages_file}.old" 2>&1 > /dev/null || \
-      gum confirm "View packages diff?" && delta "${packages_file}.old" "${packages_file}"
+    brew list | sort -u > "${packages_file}"
+    delta "${packages_file}.old" "${packages_file}"
     ;;
   "up")
-    gum confirm "Update brew?" && brew update --quiet
-    gum confirm "Upgrade brew packages?" && brew upgrade --quiet
+    brew update --quiet
+    brew upgrade --quiet
 
     goal_taps=$(sort -u "${taps_file}")
 
@@ -41,7 +39,7 @@ case $cmd in
 
     to_untap=$(comm -13 <(printf '%s\n' "$goal_taps") <(printf '%s\n' "$curr_taps"))
     if [ -n "${to_untap}" ]; then
-      gum confirm "Tap brew packages (${to_untap})?" && echo "${to_untap}" | xargs brew untap --force --quiet
+      gum confirm "Untap brew packages (${to_untap})?" && echo "${to_untap}" | xargs brew untap --force --quiet
     fi
 
     goal_packages=$(sort -u "${packages_file}")
@@ -53,10 +51,10 @@ case $cmd in
 
     to_uninstall=$(comm -13 <(printf '%s\n' "$goal_packages") <(printf '%s\n' "$curr_packages"))
     if [ -n "${to_uninstall}" ]; then
-      gum confirm "Install brew packages (${to_uninstall})?" && echo "${to_uninstall}" | xargs brew uninstall --force --quiet
+      gum confirm "Uninstall brew packages (${to_uninstall})?" && echo "${to_uninstall}" | xargs brew uninstall --force --quiet
     fi
 
-    gum confirm "Brew autoremove?" && brew autoremove --quiet
+    brew autoremove --quiet
     ;;
   *)
     echo "${cmd} not valid command"
