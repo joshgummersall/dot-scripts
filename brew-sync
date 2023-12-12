@@ -30,11 +30,12 @@ case $cmd in
     brew update --quiet
     brew upgrade --quiet
 
+    goal_packages=$(sort -u "${packages_file}")
     goal_taps=$(sort -u "${taps_file}")
 
-    to_tap=$(comm -23 <(printf '%s\n' "$goal_taps") <(printf '%s\n' "$curr_taps"))
-    if [ -n "${to_tap}" ]; then
-      gum confirm "Tap brew packages (${to_tap})?" && echo "${to_tap}" | xargs brew tap --quiet
+    to_uninstall=$(comm -13 <(printf '%s\n' "$goal_packages") <(printf '%s\n' "$curr_packages"))
+    if [ -n "${to_uninstall}" ]; then
+      gum confirm "Uninstall brew packages (${to_uninstall})?" && echo "${to_uninstall}" | xargs brew uninstall --force --quiet
     fi
 
     to_untap=$(comm -13 <(printf '%s\n' "$goal_taps") <(printf '%s\n' "$curr_taps"))
@@ -42,16 +43,14 @@ case $cmd in
       gum confirm "Untap brew packages (${to_untap})?" && echo "${to_untap}" | xargs brew untap --force --quiet
     fi
 
-    goal_packages=$(sort -u "${packages_file}")
+    to_tap=$(comm -23 <(printf '%s\n' "$goal_taps") <(printf '%s\n' "$curr_taps"))
+    if [ -n "${to_tap}" ]; then
+      gum confirm "Tap brew packages (${to_tap})?" && echo "${to_tap}" | xargs brew tap --quiet
+    fi
 
     to_install=$(comm -23 <(printf '%s\n' "$goal_packages") <(printf '%s\n' "$curr_packages"))
     if [ -n "${to_install}" ]; then
       gum confirm "Install brew packages (${to_install})?" && echo "${to_install}" | xargs brew install --quiet
-    fi
-
-    to_uninstall=$(comm -13 <(printf '%s\n' "$goal_packages") <(printf '%s\n' "$curr_packages"))
-    if [ -n "${to_uninstall}" ]; then
-      gum confirm "Uninstall brew packages (${to_uninstall})?" && echo "${to_uninstall}" | xargs brew uninstall --force --quiet
     fi
 
     brew autoremove --quiet
