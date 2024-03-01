@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+value="${1}"
+tag="${2:-Name}"
+
+regions=("us-east-1" "us-west-2")
+
+for region in "${regions[@]}"; do
+  aws ec2 describe-instances \
+    --filters "Name=tag:${tag},Values=${value}" --region="${region}" |\
+    jq -rc ".Reservations | .[]"
+done
+
