@@ -4,8 +4,9 @@ set -euo pipefail
 
 brew list |\
   fzf --query "${1:-""}" \
-    --border='bottom' --border-label='c-s: search, c-i: install, c-x: uninstall' --border-label-pos=2 \
+    --border='bottom' --border-label='c-s: search, c-y: copy, c-i: install, c-x: uninstall' --border-label-pos=2 \
     --preview='brew info {}' --preview-label='brew info' \
+    --bind 'ctrl-y:execute-silent(echo -n {1} | pbcopy)' \
     --bind 'ctrl-s:reload-sync(brew search {q})' \
     --bind 'ctrl-x:execute(brew uninstall {})+reload-sync(brew list)' \
     --bind 'ctrl-i:execute(brew install {})+reload-sync(brew list)'

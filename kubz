@@ -9,7 +9,7 @@ preview="kubectl describe ${type} {1} --show-events | bat --language=yaml --deco
 
 logs="$([[ "${type}" == "pod"* ]] && echo "execute(kubectl logs ${type}/{1} --follow)" || echo "ignore" )"
 
-label="c-r: reload, c-o: copy"
+label="c-r: reload, c-y: copy"
 if [[ "${type}" == "pod"* ]]; then
   label="${label}, c-l: logs "
 fi
@@ -20,6 +20,6 @@ kubectl get "${type}" |\
     --preview="${preview}" --preview-label='kubectl describe' \
     --bind "ctrl-r:reload(kubectl get ${type})" \
     --bind 'ctrl-d:preview-half-page-down' \
-    --bind 'ctrl-o:execute-silent(echo -n {1} | pbcopy)' \
+    --bind 'ctrl-y:execute-silent(echo -n {1} | pbcopy)' \
     --bind "ctrl-l:${logs}" \
     --bind 'ctrl-u:preview-half-page-up'
