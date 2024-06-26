@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+profile="${1:-$(rg "\[\w+\]" ~/.aws/credentials --only-matching | rg --only-matching "\w+" | fzf)}"
+
+creds="$(rg "${profile}[^\[]+" "${HOME}/.aws/credentials" \
+  --multiline \
+  --multiline-dotall |\
+  tail +2)"
+
+access_key="$(echo "${creds}" | head -1 | choose -f ' = ' 1)"
+secret_access_key="$(echo "${creds}" | tail -1 | choose -f ' = ' 1)"
+
+session="$(AWS_ACCESS_KEY_ID="${access_key}" AWS_SECRET_ACCESS_KEY="${secret_access_key}" \
+  aws sts get-session-token --output=json |\
+  fx .Credentials)"
+
+session_access_key="$(echo "${session}" | fx .AccessKeyId)"
+session_secret_access_key="$(echo "${session}" | fx .SecretAccessKey)"
+session_token="$(echo "${session}" | fx .SessionToken)"
+
+echo "export AWS_ACCESS_KEY_ID=${session_access_key}"
+echo "export AWS_SECRET_ACCESS_KEY=${session_secret_access_key}"
+echo "export AWS_SESSION_TOKEN=${session_token}"
