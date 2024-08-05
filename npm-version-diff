@@ -31,4 +31,6 @@ if ! message="$(tar -xvzf "${package}-${new_version}.tgz" 2>&1)"; then
 fi
 mv package "${package}-${new_version}"
 
-difft "${package}-${old_version}" "${package}-${new_version}"
+difft --sort-paths --color=always \
+  "${package}-${old_version}" "${package}-${new_version}" |\
+  bat
