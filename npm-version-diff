@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+package="${1}"
+old_version="${2}"
+new_version="${3}"
+
+dir=$(mktemp -d 2>/dev/null || mktemp -d -t 'dir')
+trap 'rm -rf -- "${dir}"' EXIT
+
+cd "${dir}" || exit 1
+
+if ! message="$(npm pack "${package}@${old_version}" 2>&1)"; then
+  echo "${message}" >&2
+  exit 1
+fi
+if ! message="$(tar -xvzf "${package}-${old_version}.tgz" 2>&1)"; then
+  echo "${message}" >&2
+  exit 1
+fi
+mv package "${package}-${old_version}"
+
+if ! message=$(npm pack "${package}@${new_version}" 2>&1); then
+  echo "${message}" >&2
+  exit 1
+fi
+if ! message="$(tar -xvzf "${package}-${new_version}.tgz" 2>&1)"; then
+  echo "${message}" >&2
+  exit 1
+fi
+mv package "${package}-${new_version}"
+
+difft "${package}-${old_version}" "${package}-${new_version}"
