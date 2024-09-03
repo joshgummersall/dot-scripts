@@ -22,4 +22,5 @@ kubectl get "${type}" |\
     --bind 'ctrl-d:preview-half-page-down' \
     --bind 'ctrl-y:execute-silent(echo -n {1} | pbcopy)' \
     --bind "ctrl-l:${logs}" \
+    --bind "ctrl-i:execute(${preview})" \
     --bind 'ctrl-u:preview-half-page-up'
