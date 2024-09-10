@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
 
+# https://wiki.gnucash.org/wiki/Online_Quotes#Finance::Quote
+
 sudo ARCHFLAGS='-arch arm64 -arch arm64e -arch x86_64' /Applications/Gnucash.app/Contents/Resources/bin/gnc-fq-update
