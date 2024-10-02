@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+cd "${HOME}/.scripts" || exit 1
+
+rgz "${*:-}"
