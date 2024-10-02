@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -xeuo pipefail
+
+###############################################################################
+# Use this script to update all git repositories within a directory, uses
+# `fd -x` to do this.
+###############################################################################
+
+fd -Htd '\.git' -x git -C {//} pull

@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
 
-members="Chris Cash Josh Cameron Jonathan Clement"
+members="Chris Cash Josh Cameron Jonathan Clement Eric"
 
 echo "${members}" | tr " " "\n" | gsort -R
