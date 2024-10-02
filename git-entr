@@ -2,4 +2,8 @@
 
 set -euo pipefail
 
+###############################################################################
+# use git and entr to run a command any time a git tracked file changes
+###############################################################################
+
 git ls-files | entr -dc -- "${@:1}"

@@ -2,6 +2,11 @@
 
 set -euo pipefail
 
-header_lines="${1:-1}"
+###############################################################################
+# use fzf to select from a list of items, printing and choosing the 0th column
+###############################################################################
 
-fzf --multi --header-lines="${header_lines}" | choose 0
+header_lines="${1:-1}"
+col="${2:-0}"
+
+fzf --multi --header-lines="${header_lines}" | choose "${col}"

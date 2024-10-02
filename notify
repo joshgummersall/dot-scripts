@@ -2,6 +2,10 @@
 
 set -euo pipefail
 
+###############################################################################
+# issue a system notification, useful after a long-running command
+###############################################################################
+
 message="${1:-$(gum input --prompt "message? ")}"
 
 app="${TERMINAL_APPLICATION:-${TERM_PROGRAM}}"

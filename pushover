@@ -2,6 +2,11 @@
 
 set -euo pipefail
 
+###############################################################################
+# use pushover API to send a push notification, useful after a long-running
+# command
+###############################################################################
+
 message="${1:-$(cat -)}"
 token=$(jq -r .token "${HOME}/.pushover.json")
 user=$(jq -r .user "${HOME}/.pushover.json")

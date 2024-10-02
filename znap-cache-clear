@@ -2,6 +2,10 @@
 
 set -euo pipefail
 
+###############################################################################
+# clear the znap cache, forcing commands etc. to be re-evaluated
+###############################################################################
+
 prefix="${HOME}/.cache/zsh-snap"
 entry="$(ls "${prefix}" | fzf)"
 

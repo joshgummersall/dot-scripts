@@ -2,4 +2,9 @@
 
 set -euo pipefail
 
+###############################################################################
+# print the Mac OS bundle ID of an app, useful for Mac OS settings targeting
+# specific bundles
+###############################################################################
+
 osascript -e "id of app \"${1}\""

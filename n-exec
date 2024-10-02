@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+set -xeuo pipefail
+
+###############################################################################
+# Execute a node command with a specific node.js version
+###############################################################################
 
 version=$(n ls | fzf)
 n exec "${version}" "${@:1}"

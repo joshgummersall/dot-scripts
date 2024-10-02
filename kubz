@@ -2,6 +2,10 @@
 
 set -euo pipefail
 
+###############################################################################
+# fzf-powered kubectl helper for viewing and interacting with K8s resources
+###############################################################################
+
 type="${1:-"pod"}"
 query="${2:-""}"
 

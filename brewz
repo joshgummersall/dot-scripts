@@ -2,6 +2,10 @@
 
 set -euo pipefail
 
+###############################################################################
+# list and interact with brew packages, powered by fzf
+###############################################################################
+
 brew list |\
   fzf --query "${1:-""}" \
     --border='bottom' --border-label='c-s: search, c-y: copy, c-i: install, c-x: uninstall' --border-label-pos=2 \

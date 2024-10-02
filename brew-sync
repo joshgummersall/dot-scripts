@@ -2,6 +2,10 @@
 
 set -euo pipefail
 
+###############################################################################
+# script that uses files to sync brew taps/packages on a sytem
+###############################################################################
+
 prefix=".brew-sync"
 path="${HOME}/${prefix}"
 

@@ -2,5 +2,10 @@
 
 set -euo pipefail
 
+###############################################################################
+# Calculate a checksum over a directory of files, uses `sort` to ensure results
+# are deterministic
+###############################################################################
+
 cd "${1:-.}" || exit 1
 fd -tf -x md5 {} | sort | md5

@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+set -xeuo pipefail
+
+###############################################################################
+# Execute a command on a kubernetes pod
+###############################################################################
 
 kubectl run "${2:-"joshgu-tmp"}" --restart=Never --rm -i --tty --image "${1:-"busybox"}"

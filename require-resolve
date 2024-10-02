@@ -2,4 +2,8 @@
 
 set -euo pipefail
 
+###############################################################################
+# use node.js require.resolve to find a package on disk
+###############################################################################
+
 node -e "console.log(require.resolve('${1}'))"

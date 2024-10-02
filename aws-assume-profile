@@ -2,6 +2,11 @@
 
 set -euo pipefail
 
+###############################################################################
+# use this script via `source aws-assume-profile` to run the aws CLI commands
+# necessary to assume another IAM role in the current shell session
+###############################################################################
+
 profile="${1:-$(rg "\[\w+\]" ~/.aws/credentials --only-matching | rg --only-matching "\w+" | fzf)}"
 
 creds="$(rg "${profile}[^\[]+" "${HOME}/.aws/credentials" \

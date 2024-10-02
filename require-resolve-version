@@ -2,4 +2,8 @@
 
 set -euo pipefail
 
+###############################################################################
+# use node.js require.resolve to print the version of a package on disk
+###############################################################################
+
 jq .version $(require-resolve "${1}/package.json")

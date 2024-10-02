@@ -2,6 +2,10 @@
 
 set -euo pipefail
 
-image="$(docker images | fzf --header-lines=1 | choose 2)"
+###############################################################################
+# helper to run a docker image
+###############################################################################
+
+image="$(docker images | fzc 1 2)"
 
 docker run --rm -ti "${@:1}" "${image}"

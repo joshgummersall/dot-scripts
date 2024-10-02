@@ -2,10 +2,19 @@
 
 set -euo pipefail
 
+###############################################################################
+# find a port and the associated process
+###############################################################################
+
 if [ "$EUID" -ne 0 ]; then
     echo "Please run this script with sudo."
     exit 1
 fi
 
+q="${1:-""}"
+if [ ! -z "${q}" ]; then
+  q="'${q}"
+fi
+
 lsof -nP -iTCP -sTCP:LISTEN |\
-  fzf --header-lines=1 --multi -q "${1:-""}"
+  fzf --header-lines=1 --multi -q "${q}"
