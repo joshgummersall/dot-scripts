@@ -15,4 +15,4 @@ fzf --ansi --disabled --query "${*:-}" \
     --bind "change:reload:sleep 0.1; ${RG_PREFIX} {q} || true" \
     --delimiter : \
     --preview 'fzf-bat-preview {1} {2}' \
-    --bind 'enter:become(vim {1} +{2})'
+    --bind "enter:become(${EDITOR:-vim} {1})"
