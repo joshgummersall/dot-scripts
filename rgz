@@ -8,10 +8,9 @@ set -euo pipefail
 # Source: https://github.com/junegunn/fzf/blob/master/ADVANCED.md#ripgrep-integration
 ###############################################################################
 
-RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
-INITIAL_QUERY="${*:-}"
+RG_PREFIX="rg ${RG_FLAGS:-""} --column --line-number --no-heading --color=always --smart-case "
 
-fzf --ansi --disabled --query "${INITIAL_QUERY}" \
+fzf --ansi --disabled --query "${*:-}" \
     --bind "start:reload:${RG_PREFIX} {q}" \
     --bind "change:reload:sleep 0.1; ${RG_PREFIX} {q} || true" \
     --delimiter : \
