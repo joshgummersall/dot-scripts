@@ -11,8 +11,8 @@ set -euo pipefail
 RG_PREFIX="rg ${RG_FLAGS:-""} --column --line-number --no-heading --color=always --smart-case "
 
 fzf --ansi --disabled --query "${*:-}" \
-    --bind "start:reload:${RG_PREFIX} {q}" \
+    --bind "start:reload:${RG_PREFIX} {q} || true" \
     --bind "change:reload:sleep 0.1; ${RG_PREFIX} {q} || true" \
     --delimiter : \
     --preview 'fzf-bat-preview {1} {2}' \
-    --bind "enter:become(${EDITOR:-vim} {1})"
+    --bind "enter:execute(${EDITOR:-vim} {1})+reload:${RG_PREFIX} {q} || true"
