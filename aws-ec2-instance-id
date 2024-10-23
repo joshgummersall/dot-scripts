@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# Describe EC2 instance by instance ID
+
+set -euo pipefail
+
+aws ec2 describe-instances --instance-ids="${1}" --region="${2:-"us-east-1"}"

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# SSH into EC2 instance by ID
+
+set -euo pipefail
+
+ssh $(aws-ec2-instance-ip "${1}" "${2:-"us-east-1"}")

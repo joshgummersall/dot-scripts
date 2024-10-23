@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# Find private IP address of EC2 instance by ID, useful for ssh
+
+set -euo pipefail
+
+aws-ec2-instance-id "${1}" "${2:-"us-east-1"}" |\
+  fx ".Reservations[0].Instances[0].NetworkInterfaces[0].PrivateIpAddress"
