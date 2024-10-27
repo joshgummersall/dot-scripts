@@ -1,6 +1,6 @@
 #/usr/bin/env bash
 
-set -euo pipefail
+set -xeuo pipefail
 
 ###############################################################################
 # git assume a set of files is unchanged

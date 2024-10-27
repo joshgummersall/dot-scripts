@@ -1,6 +1,6 @@
 #/usr/bin/env bash
 
-set -euo pipefail
+set -xeuo pipefail
 
 ###############################################################################
 # use git and entr to run a command any time a git tracked file changes
