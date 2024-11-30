@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+fx package.json \
+  "Object.keys(x.dependencies).concat(Object.keys(x.devDependencies))" |\
+   jq -rc '.[]' |\
+   xargs -I % sh -c 'echo "%: $(rg -q % && echo "yes" || echo "no")"' |\
+   rg ': no$' || echo "No unused dependencies!"

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+yarn why "${1}" --json ${@:2} | fx -s
