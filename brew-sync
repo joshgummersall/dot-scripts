@@ -59,6 +59,9 @@ case $cmd in
 
     brew autoremove --quiet
     ;;
+  "unlock")
+    gum confirm "Remove brew locks?" && rm -rf "$(brew --prefix)/var/homebrew/locks"
+    ;;
   *)
     echo "${cmd} not valid command"
     ;;
