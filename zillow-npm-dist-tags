@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+package=$(echo "${1}" | sd '/' '%2f')
+
+curl -s -L \
+  "https://artifactory.zgtools.net/artifactory/api/npm/znpm/-/package/${package}/dist-tags"
