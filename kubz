@@ -11,18 +11,18 @@ query="${2:-""}"
 
 preview="kubectl describe ${type} {1} --show-events | bat --language=yaml --decorations=never"
 
-logs="$([[ "${type}" == "pod"* ]] && echo "execute(kubectl logs ${type}/{1} --follow)" || echo "ignore" )"
+logs="$([[ "${type}" == "pod"* ]] && echo "execute(kubectl logs ${type}/{1} --follow | bat)" || echo "ignore" )"
 
-label="c-r: reload, c-y: copy"
+label="c-r: reload, c-y: copy, c-i: describe"
 if [[ "${type}" == "pod"* ]]; then
   label="${label}, c-l: logs "
 fi
 
-kubectl get "${type}" |\
-  fzf --header-lines=1 --query="${query}" \
+kubectl get "${type}" --sort-by .metadata.creationTimestamp | tac |\
+  fzf --query="${query}" \
     --border='bottom' --border-label="${label}" --border-label-pos=2 \
     --preview="${preview}" --preview-label='kubectl describe' \
-    --bind "ctrl-r:reload(kubectl get ${type})" \
+    --bind "ctrl-r:reload(kubectl get ${type} --sort-by .metadata.creationTimestamp | tac)" \
     --bind 'ctrl-d:preview-half-page-down' \
     --bind 'ctrl-y:execute-silent(echo -n {1} | pbcopy)' \
     --bind "ctrl-l:${logs}" \
